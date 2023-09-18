@@ -1,0 +1,38 @@
+{
+  "name": "eightsteps-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/javim89/eightsteps-back.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/javim89/eightsteps-back/issues"
+  },
+  "homepage": "https://github.com/javim89/eightsteps-back#readme",
+  "type": "module",
+  "dependencies": {
+    "@apollo/server": "^4.9.3",
+    "@graphql-tools/schema": "^10.0.0",
+    "apollo-server-express": "^3.12.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "graphql": "^16.8.0",
+    "graphql-subscriptions": "^2.0.0",
+    "graphql-ws": "^5.14.0",
+    "luxon": "^3.4.3",
+    "mongoose": "^7.5.2",
+    "ws": "^8.14.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
