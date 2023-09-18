@@ -3,12 +3,12 @@ import { Schema, model } from "mongoose";
 export const UserSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   surname: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 }, { timestamps: true });
 
 const User = model("User", UserSchema);

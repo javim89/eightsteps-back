@@ -3,5 +3,5 @@ import UserResolvers from "./User.js";
 
 export {
   RoomResolvers,
-  UserResolvers
-}
+  UserResolvers,
+};

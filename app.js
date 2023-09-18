@@ -7,16 +7,16 @@ import express from "express";
 import { useServer } from "graphql-ws/lib/use/ws";
 import bodyParser from "body-parser";
 import cors from "cors";
-import { UserTypeDefs, RoomTypeDefs } from "./typeDefs/index.js";
-import { UserResolvers, RoomResolvers } from "./resolvers/index.js"
 import { PubSub } from "graphql-subscriptions";
-import { connectDB } from "./db.js";
 import { WebSocketServer } from "ws";
+import { UserTypeDefs, RoomTypeDefs } from "./typeDefs/index.js";
+import { UserResolvers, RoomResolvers } from "./resolvers/index.js";
+import { connectDB } from "./db.js";
 
 const schema = makeExecutableSchema({
   typeDefs: [UserTypeDefs, RoomTypeDefs],
-  resolvers: [UserResolvers, RoomResolvers]
-})
+  resolvers: [UserResolvers, RoomResolvers],
+});
 
 const app = express();
 const pubSub = new PubSub();
@@ -25,14 +25,14 @@ connectDB();
 const httpServer = createServer(app);
 const wsServer = new WebSocketServer({
   server: httpServer,
-  path: "/graphql"
-})
+  path: "/graphql",
+});
 
 const serverCleanup = useServer({
   schema,
-  context: async (ctx, msg, args) => ({
-    pubSub
-  })
+  context: async () => ({
+    pubSub,
+  }),
 }, wsServer);
 
 const server = new ApolloServer({
@@ -47,19 +47,19 @@ const server = new ApolloServer({
         return {
           async drainServer() {
             await serverCleanup.dispose();
-          }
+          },
         };
-      }
-    }
-  ]
+      },
+    },
+  ],
 });
 
 await server.start();
 app.get("/", (req, res) => res.send("Visit /graphql"));
 app.use("/graphql", cors(), bodyParser.json(), expressMiddleware(server, {
-  context: async ({ req }) => ({
-    pubSub
-  })
+  context: async () => ({
+    pubSub,
+  }),
 }));
 
 const PORT = 3000;

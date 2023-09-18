@@ -3,5 +3,5 @@ import UserTypeDefs from "./User.js";
 
 export {
   RoomTypeDefs,
-  UserTypeDefs
-}
+  UserTypeDefs,
+};
