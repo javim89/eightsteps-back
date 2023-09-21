@@ -5,6 +5,7 @@ const UserTypeDefs = gql`
     id: ID,
     name: String,
     surname: String
+    alias: String
   }
 
   type Query {

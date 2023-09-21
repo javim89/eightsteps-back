@@ -9,6 +9,10 @@ export const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  alias: {
+    type: String,
+    required: false,
+  },
 }, { timestamps: true });
 
 const User = model("User", UserSchema);

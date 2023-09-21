@@ -4,14 +4,16 @@ const RoomTypeDefs = gql`
   type Room {
     id: ID,
     isPrivate: Boolean,
+    name: String,
     participants: [User],
+    watching: [User],
   }
   type Query {
     getAllRooms: [Room]
     getRoomById(id: ID): Room
   }
   type Mutation {
-    createRoom(isPrivate: Boolean): Room
+    createRoom(isPrivate: Boolean, name: String, password: String): Room
   }
 `;
 
