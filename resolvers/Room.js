@@ -44,12 +44,24 @@ const initializeSteps = (userId) => {
 const RoomResolvers = {
   Query: {
     getAllRooms: async () => {
-      const rooms = Room.find().populate("participants");
+      const rooms = Room.find().populate({
+        path: "steps",
+        populate: {
+          path: "participants",
+          model: "User",
+        },
+      });
       return rooms;
     },
     getRoomById: async (_, { id }) => {
       if (Types.ObjectId.isValid(id)) {
-        return Room.findById(id).populate("participants");
+        return Room.findById(id).populate({
+          path: "steps",
+          populate: {
+            path: "participants",
+            model: "User",
+          },
+        });
       }
       throw new GraphQLError("Invalid ID", {
         extensions: { code: "404" },
