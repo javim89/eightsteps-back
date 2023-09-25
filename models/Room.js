@@ -4,9 +4,13 @@ const RoomSchema = new Schema({
   isPrivate: Boolean,
   name: String,
   password: String,
-  participants: [{
-    type: Schema.Types.ObjectId,
-    ref: "User",
+  steps: [{
+    participants: [{
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    }],
+    step: Number,
+    category: String,
   }],
   watching: [{
     type: Schema.Types.ObjectId,

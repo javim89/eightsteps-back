@@ -5,7 +5,7 @@ const RoomTypeDefs = gql`
     id: ID,
     isPrivate: Boolean,
     name: String,
-    participants: [User],
+    steps: [Step],
     watching: [User],
   }
   type Query {

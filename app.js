@@ -9,12 +9,12 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import { PubSub } from "graphql-subscriptions";
 import { WebSocketServer } from "ws";
-import { UserTypeDefs, RoomTypeDefs } from "./typeDefs/index.js";
+import { UserTypeDefs, RoomTypeDefs, StepTypeDefs } from "./typeDefs/index.js";
 import { UserResolvers, RoomResolvers } from "./resolvers/index.js";
 import { connectDB } from "./db.js";
 
 const schema = makeExecutableSchema({
-  typeDefs: [UserTypeDefs, RoomTypeDefs],
+  typeDefs: [UserTypeDefs, RoomTypeDefs, StepTypeDefs],
   resolvers: [UserResolvers, RoomResolvers],
 });
 
