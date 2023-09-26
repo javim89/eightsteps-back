@@ -7,6 +7,7 @@ const RoomTypeDefs = gql`
     name: String,
     steps: [Step],
     watching: [User],
+    participants: Int
   }
   type Query {
     getAllRooms: [Room]

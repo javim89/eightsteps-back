@@ -104,6 +104,10 @@ const RoomResolvers = {
       });
     },
   },
+  Room: {
+    // eslint-disable-next-line max-len
+    participants: (root) => root.steps.reduce((prev, current) => prev + current.participants.length, 0),
+  },
 };
 
 export default RoomResolvers;
