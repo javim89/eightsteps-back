@@ -9,13 +9,14 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import { PubSub } from "graphql-subscriptions";
 import { WebSocketServer } from "ws";
-import { UserTypeDefs, RoomTypeDefs, StepTypeDefs } from "./typeDefs/index.js";
-import { UserResolvers, RoomResolvers } from "./resolvers/index.js";
+import typeDefs from "./typeDefs/index.js";
+import resolvers from "./resolvers/index.js";
 import { connectDB } from "./db.js";
+import startSeeders from "./seed/index.js";
 
 const schema = makeExecutableSchema({
-  typeDefs: [UserTypeDefs, RoomTypeDefs, StepTypeDefs],
-  resolvers: [UserResolvers, RoomResolvers],
+  typeDefs,
+  resolvers,
 });
 
 const app = express();
@@ -54,6 +55,7 @@ const server = new ApolloServer({
   ],
 });
 
+startSeeders();
 await server.start();
 app.get("/", (req, res) => res.send("Visit /graphql"));
 app.use("/graphql", cors(), bodyParser.json(), expressMiddleware(server, {

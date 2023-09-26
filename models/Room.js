@@ -10,7 +10,10 @@ const RoomSchema = new Schema({
       ref: "User",
     }],
     step: Number,
-    category: String,
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: "Category",
+    },
   }],
   watching: [{
     type: Schema.Types.ObjectId,

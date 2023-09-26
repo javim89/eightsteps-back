@@ -2,43 +2,54 @@ import { Types } from "mongoose";
 import { GraphQLError } from "graphql";
 import Room from "../models/Room.js";
 import User from "../models/User.js";
+import categories from "../utils/constants.js";
+import Category from "../models/Category.js";
 
-const initializeSteps = (userId) => {
-  const step = {
-    step: 1,
-    category: "HISTORIA",
+const initializeSteps = async (userId) => {
+  const historyCategory = await Category.findOne({ name: categories.HISTORY }).exec();
+  const cultureCategory = await Category.findOne({ name: categories.CULTURE }).exec();
+  const sportCategory = await Category.findOne({ name: categories.SPORTS }).exec();
+  const geographyCategory = await Category.findOne({ name: categories.GEOGRAPHY }).exec();
+  const technologyCategory = await Category.findOne({ name: categories.TECHNOLOGY }).exec();
+  const entertainmentCategory = await Category.findOne({ name: categories.ENTERTAINMENT }).exec();
+  const scienceCategory = await Category.findOne({ name: categories.SCIENCE }).exec();
+  const winnerCategory = await Category.findOne({ name: categories.WINNER }).exec();
+
+  const step8 = {
+    step: 8,
+    category: historyCategory,
     participants: [userId],
-  };
-  const step2 = {
-    step: 2,
-    category: "CULTURA",
-  };
-  const step3 = {
-    step: 3,
-    category: "DEPORTES",
-  };
-  const step4 = {
-    step: 4,
-    category: "GEOGRAFIA",
-  };
-  const step5 = {
-    step: 5,
-    category: "TECNOLOGIA",
-  };
-  const step6 = {
-    step: 6,
-    category: "ENTRETENIMIENTO",
   };
   const step7 = {
     step: 7,
-    category: "CIENCIA",
+    category: cultureCategory,
   };
-  const step8 = {
-    step: 8,
-    category: "GANADOR",
+  const step6 = {
+    step: 6,
+    category: sportCategory,
+  };
+  const step5 = {
+    step: 5,
+    category: geographyCategory,
+  };
+  const step4 = {
+    step: 4,
+    category: technologyCategory,
+  };
+  const step3 = {
+    step: 3,
+    category: entertainmentCategory,
+  };
+  const step2 = {
+    step: 2,
+    category: scienceCategory,
+  };
+  const step1 = {
+    step: 1,
+    category: winnerCategory,
   };
 
-  return [step, step2, step3, step4, step5, step6, step7, step8];
+  return [step1, step2, step3, step4, step5, step6, step7, step8];
 };
 
 const RoomResolvers = {
@@ -57,10 +68,14 @@ const RoomResolvers = {
       if (Types.ObjectId.isValid(id)) {
         return Room.findById(id).populate({
           path: "steps",
-          populate: {
+          populate: [{
             path: "participants",
             model: "User",
           },
+          {
+            path: "category",
+            model: "Category",
+          }],
         });
       }
       throw new GraphQLError("Invalid ID", {
@@ -77,9 +92,8 @@ const RoomResolvers = {
       });
       const newUser = await user.save();
       const room = new Room(args);
-      const steps = initializeSteps(newUser.id);
+      const steps = await initializeSteps(newUser.id);
       steps.map((step) => room.steps.push(step));
-      // room.steps.push(steps);
       const newRoom = await room.save();
       return newRoom.populate({
         path: "steps",

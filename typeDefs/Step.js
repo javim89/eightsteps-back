@@ -5,7 +5,7 @@ const StepTypeDefs = gql`
     id: ID,
     participants: [User]
     step: Int,
-    category: String
+    category: Category
   }
 `;
 
