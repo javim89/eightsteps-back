@@ -10,11 +10,12 @@ const RoomTypeDefs = gql`
     participants: Int
   }
   type Query {
-    getAllRooms: [Room]
+    getAllRooms: [Room],
     getRoomById(id: ID): Room
   }
   type Mutation {
-    createRoom(isPrivate: Boolean, name: String, password: String): Room
+    createRoom(isPrivate: Boolean, name: String, password: String): Room,
+    addParticipantToRoom(id:ID, alias: String): Room
   }
 `;
 

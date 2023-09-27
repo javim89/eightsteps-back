@@ -3,11 +3,11 @@ import { Schema, model } from "mongoose";
 export const UserSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    required: false,
   },
   surname: {
     type: String,
-    required: true,
+    required: false,
   },
   alias: {
     type: String,

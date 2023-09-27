@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Types } from "mongoose";
 import { GraphQLError } from "graphql";
 import Room from "../models/Room.js";
@@ -101,6 +102,33 @@ const RoomResolvers = {
           path: "participants",
           model: "User",
         },
+      });
+    },
+    addParticipantToRoom: async (_, args) => {
+      const { id, alias } = args;
+      if (Types.ObjectId.isValid(id)) {
+        const user = new User({
+          alias,
+        });
+        const newUser = await user.save();
+        const room = await Room.findById(id).populate({
+          path: "steps",
+          populate: [{
+            path: "participants",
+            model: "User",
+          },
+          {
+            path: "category",
+            model: "Category",
+          }],
+        });
+        const participants = room.steps.reduce((prev, current) => prev + current.participants.length, 0);
+        (participants >= 8) ? room.watching.push(newUser) : room.steps[7].participants.push(newUser);
+        await room.save();
+        return room;
+      }
+      throw new GraphQLError("Invalid ID", {
+        extensions: { code: "404" },
       });
     },
   },

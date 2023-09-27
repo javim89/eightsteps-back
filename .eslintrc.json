@@ -10,6 +10,7 @@
     },
     "rules": {
         "quotes": ["error", "double"],
+        "no-unused-expressions": ["error", { "allowTernary": true }],
         "import/extensions": [
             "error",
             {
