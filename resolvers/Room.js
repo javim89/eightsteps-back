@@ -104,7 +104,7 @@ const RoomResolvers = {
         },
       });
     },
-    addParticipantToRoom: async (_, args) => {
+    addParticipantToRoom: async (_, args, { pubSub }) => {
       const { id, alias } = args;
       if (Types.ObjectId.isValid(id)) {
         const user = new User({
@@ -125,11 +125,17 @@ const RoomResolvers = {
         const participants = room.steps.reduce((prev, current) => prev + current.participants.length, 0);
         (participants >= 8) ? room.watching.push(newUser) : room.steps[7].participants.push(newUser);
         await room.save();
+        pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
         return room;
       }
       throw new GraphQLError("Invalid ID", {
         extensions: { code: "404" },
       });
+    },
+  },
+  Subscription: {
+    roomSubscription: {
+      subscribe: (_, { id }, { pubSub }) => pubSub.asyncIterator(`ROOM_UPDATED_${id}`),
     },
   },
   Room: {

@@ -17,6 +17,9 @@ const RoomTypeDefs = gql`
     createRoom(isPrivate: Boolean, name: String, password: String): Room,
     addParticipantToRoom(id:ID, alias: String): Room
   }
+  type Subscription {
+    roomSubscription(id: ID): Room
+  }
 `;
 
 export default RoomTypeDefs;
