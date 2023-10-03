@@ -3,9 +3,10 @@ import { gql } from "apollo-server-express";
 const StepTypeDefs = gql`
   type Step {
     id: ID,
-    participants: [User]
+    participants: [User],
     step: Int,
-    category: Category
+    category: Category,
+    question: Question
   }
 `;
 

@@ -41,7 +41,12 @@ const getRoomById = async (_, { id }) => {
       {
         path: "category",
         model: "Category",
-      }],
+      },
+      {
+        path: "question",
+        model: "QuestionsAndAnswer",
+      },
+      ],
     });
   }
   throw new GraphQLError("Invalid ID", {
