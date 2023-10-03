@@ -19,6 +19,11 @@ const RoomSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   }],
+  status: {
+    type: String,
+    enum: ["NEW", "PLAYING", "FINISHED"],
+    default: "NEW",
+  },
 }, { timestamps: true });
 
 const Room = model("Room", RoomSchema);

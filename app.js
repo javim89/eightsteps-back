@@ -13,6 +13,7 @@ import typeDefs from "./typeDefs/index.js";
 import resolvers from "./resolvers/index.js";
 import { connectDB } from "./db.js";
 import startSeeders from "./seed/index.js";
+import startSchedulers from "./schedulers/init.js";
 
 const schema = makeExecutableSchema({
   typeDefs,
@@ -57,6 +58,7 @@ const server = new ApolloServer({
 
 startSeeders();
 await server.start();
+startSchedulers(pubSub);
 app.get("/", (req, res) => res.send("Visit /graphql"));
 app.use("/graphql", cors(), bodyParser.json(), expressMiddleware(server, {
   context: async () => ({

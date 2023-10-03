@@ -5,6 +5,7 @@ import Room from "../models/Room.js";
 import User from "../models/User.js";
 import categories from "../utils/constants.js";
 import Category from "../models/Category.js";
+import * as RoomController from "../controllers/Room.js";
 
 const initializeSteps = async (userId) => {
   const historyCategory = await Category.findOne({ name: categories.HISTORY }).exec();
@@ -55,34 +56,9 @@ const initializeSteps = async (userId) => {
 
 const RoomResolvers = {
   Query: {
-    getAllRooms: async () => {
-      const rooms = Room.find().populate({
-        path: "steps",
-        populate: {
-          path: "participants",
-          model: "User",
-        },
-      });
-      return rooms;
-    },
-    getRoomById: async (_, { id }) => {
-      if (Types.ObjectId.isValid(id)) {
-        return Room.findById(id).populate({
-          path: "steps",
-          populate: [{
-            path: "participants",
-            model: "User",
-          },
-          {
-            path: "category",
-            model: "Category",
-          }],
-        });
-      }
-      throw new GraphQLError("Invalid ID", {
-        extensions: { code: "404" },
-      });
-    },
+    getAllRooms: async () => RoomController.getAllRooms(),
+    getRoomById: async (_, props) => RoomController.getRoomById(_, props),
+    getUnfilledRoom: () => RoomController.getUnfilledRoom(),
   },
   Mutation: {
     createRoom: async (_, args) => {

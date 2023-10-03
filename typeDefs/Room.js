@@ -7,11 +7,13 @@ const RoomTypeDefs = gql`
     name: String,
     steps: [Step],
     watching: [User],
-    participants: Int
+    participants: Int,
+    status: String
   }
   type Query {
     getAllRooms: [Room],
-    getRoomById(id: ID): Room
+    getUnfilledRoom: [Room],
+    getRoomById(id: ID): Room,
   }
   type Mutation {
     createRoom(isPrivate: Boolean, name: String, password: String): Room,
