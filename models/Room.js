@@ -14,6 +14,11 @@ const RoomSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: "Category",
     },
+    question: {
+      type: Schema.Types.ObjectId,
+      ref: "QuestionsAndAnswers",
+      required: false,
+    },
   }],
   watching: [{
     type: Schema.Types.ObjectId,
