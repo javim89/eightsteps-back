@@ -6,8 +6,25 @@ const RoomSchema = new Schema({
   password: String,
   steps: [{
     participants: [{
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+      answerOne: {
+        type: Boolean,
+        required: false,
+        default: null,
+      },
+      isAnswerOneCorrect: {
+        type: Boolean,
+        required: false,
+        default: null,
+      },
+      answerTwo: {
+        type: Number,
+        required: false,
+        default: null,
+      },
     }],
     step: Number,
     category: {
@@ -29,6 +46,8 @@ const RoomSchema = new Schema({
     enum: ["NEW", "PLAYING", "FINISHED"],
     default: "NEW",
   },
+  currentStep: Number,
+  showQuestion: Boolean,
 }, { timestamps: true });
 
 const Room = model("Room", RoomSchema);

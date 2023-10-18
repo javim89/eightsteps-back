@@ -20,11 +20,18 @@ const getUnfilledRoom = async () => {
     path: "steps",
     populate: [{
       path: "participants",
-      model: "User",
+      populate: {
+        path: "user",
+        model: "User",
+      },
     },
     {
       path: "category",
       model: "Category",
+    },
+    {
+      path: "question",
+      model: "QuestionsAndAnswer",
     }],
   });
   return unfilledRoom;
@@ -36,7 +43,10 @@ const getRoomById = async (_, { id }) => {
       path: "steps",
       populate: [{
         path: "participants",
-        model: "User",
+        populate: {
+          path: "user",
+          model: "User",
+        },
       },
       {
         path: "category",

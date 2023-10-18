@@ -11,7 +11,7 @@ const QuestionsAndAnswersSchema = new Schema({
     type: String,
     required: false,
   },
-  // type: verdadero/false, con foto, multiplechoice, numerica, etc
+  // type: verdadero/false, con foto, multiplechoice, numerica (proximidad), etc
 });
 
 const QuestionsAndAnswers = model("QuestionsAndAnswer", QuestionsAndAnswersSchema);

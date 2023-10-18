@@ -39,7 +39,7 @@ const initializeSteps = async (userId) => {
   const step8 = {
     step: 8,
     category: historyCategory,
-    participants: [userId],
+    participants: [{ user: userId }],
     question: historyQuestion[getRandomInt()],
   };
   const step7 = {
@@ -102,7 +102,10 @@ const RoomResolvers = {
         path: "steps",
         populate: {
           path: "participants",
-          model: "User",
+          populate: {
+            path: "user",
+            model: "User",
+          },
         },
       });
     },
@@ -116,16 +119,24 @@ const RoomResolvers = {
         const room = await Room.findById(id).populate({
           path: "steps",
           populate: [{
-            path: "participants",
-            model: "User",
-          },
-          {
             path: "category",
             model: "Category",
+          },
+          {
+            path: "participants",
+            populate: [{
+              path: "user",
+              model: "User",
+            }],
           }],
         });
         const participants = room.steps.reduce((prev, current) => prev + current.participants.length, 0);
-        (participants >= 8) ? room.watching.push(newUser) : room.steps[7].participants.push(newUser);
+        (participants >= 8) ? room.watching.push(newUser) : room.steps[7].participants.push({ user: newUser });
+        if (room.steps[7].participants.length === 8) {
+          room.status = "PLAYING";
+          room.currentStep = 8;
+          room.showQuestion = true;
+        }
         await room.save();
         pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
         return room;

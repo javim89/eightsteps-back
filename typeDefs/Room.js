@@ -8,7 +8,9 @@ const RoomTypeDefs = gql`
     steps: [Step],
     watching: [User],
     participants: Int,
-    status: String
+    status: String,
+    currentStep: Int,
+    showQuestion: Boolean
   }
   type Query {
     getAllRooms: [Room],
@@ -18,6 +20,7 @@ const RoomTypeDefs = gql`
   type Mutation {
     createRoom(isPrivate: Boolean, name: String, password: String): Room,
     addParticipantToRoom(id:ID, alias: String): Room
+    checkAnswer(id: ID, answerId: ID, userId: ID, answer: Boolean): Boolean
   }
   type Subscription {
     roomSubscription(id: ID): Room
