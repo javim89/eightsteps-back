@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 const UserResolvers = {
@@ -12,14 +13,30 @@ const UserResolvers = {
     },
   },
   Mutation: {
-    createUser: async (_, { name, surname }) => {
+    createUser: async (_, { alias, name, surname }, { res }) => {
       const user = new User({
+        alias,
         name,
         surname,
       });
 
       const newUser = await user.save();
-      return newUser;
+
+      const token = jwt.sign(
+        { userId: newUser.id, alias: user.alias },
+        process.env.JWT_PRIVATE_KEY,
+        { expiresIn: process.env.TOKEN_EXPIRY_TIME },
+      );
+
+      res.cookie("auth-token", token, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 8600,
+      });
+
+      return {
+        token,
+      };
     },
   },
 };

@@ -9,6 +9,9 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import { PubSub } from "graphql-subscriptions";
 import { WebSocketServer } from "ws";
+import jwt from "jsonwebtoken";
+import * as dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import typeDefs from "./typeDefs/index.js";
 import resolvers from "./resolvers/index.js";
 import { connectDB } from "./db.js";
@@ -22,6 +25,7 @@ const schema = makeExecutableSchema({
 
 const app = express();
 const pubSub = new PubSub();
+dotenv.config();
 
 connectDB();
 const httpServer = createServer(app);
@@ -30,15 +34,36 @@ const wsServer = new WebSocketServer({
   path: "/graphql",
 });
 
+const getUser = async (token) => {
+  try {
+    if (token) {
+      const user = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
+      return user;
+    }
+    return null;
+  } catch (error) {
+    return null;
+  }
+};
 const serverCleanup = useServer({
   schema,
-  context: async () => ({
-    pubSub,
-  }),
+  context: async ({ req, res }) => {
+    // Get the user token from the headers.
+    const token = req.headers.authorization || "";
+    // Try to retrieve a user with the token
+    const user = await getUser(token);
+
+    // Add the user to the context
+    return { user, res, pubSub };
+  },
 }, wsServer);
 
 const server = new ApolloServer({
   schema,
+  cors: {
+    origin: "http://localhost:5173",
+    credentials: true,
+  },
   plugins: [
     // Proper shutdown for the HTTP server.
     ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -59,11 +84,30 @@ const server = new ApolloServer({
 startSeeders();
 await server.start();
 startSchedulers(pubSub);
+
+const corsOptions = {
+  origin: ["http://localhost:5173", "https://graphql.api.apollographql.com"],
+  credentials: true, // <-- REQUIRED backend setting
+};
+
+app.use(cookieParser("secret"));
 app.get("/", (req, res) => res.send("Visit /graphql"));
-app.use("/graphql", cors(), bodyParser.json(), expressMiddleware(server, {
-  context: async () => ({
-    pubSub,
-  }),
+app.use("/graphql", cors(corsOptions), bodyParser.json(), expressMiddleware(server, {
+  context: async ({ req, res }) => {
+    // Get the user token from the headers.
+    // console.log(req.headers.authorization);
+    // Cookies that have not been signed
+    // console.log("token: ", req.cookies.token);
+    // console.log("token: ", req.signedCookies.token);
+
+    const token = req.cookies.token || "";
+
+    // Try to retrieve a user with the token
+    const user = await getUser(token);
+
+    // Add the user to the context
+    return { user, res, pubSub };
+  },
 }));
 
 const PORT = 3000;

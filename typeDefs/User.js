@@ -1,6 +1,10 @@
 import { gql } from "apollo-server-express";
 
 const UserTypeDefs = gql`
+  type JwtToken {
+    token: String!
+  }
+
   type User {
     id: ID,
     name: String,
@@ -14,7 +18,7 @@ const UserTypeDefs = gql`
   }
 
   type Mutation {
-    createUser(name: String, surname: String): User
+    createUser(alias: String, name: String, surname: String): JwtToken
   }
 `;
 
