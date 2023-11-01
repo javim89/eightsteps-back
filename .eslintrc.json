@@ -11,6 +11,7 @@
     "rules": {
         "quotes": ["error", "double"],
         "no-unused-expressions": ["error", { "allowTernary": true }],
+        "max-len": ["error", { "comments": 150, "code": 150 }],
         "import/extensions": [
             "error",
             {
