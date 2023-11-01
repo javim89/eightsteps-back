@@ -12,6 +12,13 @@ const UserTypeDefs = gql`
     alias: String
   }
 
+  type Bot {
+    id: ID,
+    name: String,
+    surname: String
+    alias: String
+  }
+
   type Query {
     getAllUsers: [User],
     getUserById(id:ID): User

@@ -1,12 +1,12 @@
 /* eslint-disable no-new */
 import { CronJob } from "cron";
-import createBot from "./createBot.js";
+import addBot from "./addBot.js";
 
 export default function startSchedulers(pubSub) {
   new CronJob(
     "*/5 * * * * *",
     (() => {
-      createBot(pubSub);
+      addBot(pubSub);
     }),
     null,
     true,

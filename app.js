@@ -47,15 +47,14 @@ const getUser = async (token) => {
 };
 const serverCleanup = useServer({
   schema,
-  context: async ({ req, res }) => {
-    // Get the user token from the headers.
-    const token = req.headers.authorization || "";
-    // Try to retrieve a user with the token
-    const user = await getUser(token);
+  context: async ({ req, res }) => ({ req, res, pubSub })
+  // Get the user token from the headers.
+  // const token = req.cookies["auth-token"] || "";
+  // // Try to retrieve a user with the token
+  // const user = await getUser(token);
+  // Add the user to the context
 
-    // Add the user to the context
-    return { user, res, pubSub };
-  },
+  ,
 }, wsServer);
 
 const server = new ApolloServer({
@@ -101,10 +100,8 @@ app.use("/graphql", cors(corsOptions), bodyParser.json(), expressMiddleware(serv
     // console.log("token: ", req.signedCookies.token);
 
     const token = req.cookies["auth-token"] || "";
-
     // Try to retrieve a user with the token
     const user = await getUser(token);
-
     // Add the user to the context
     return { user, res, pubSub };
   },

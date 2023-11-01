@@ -87,15 +87,9 @@ const RoomResolvers = {
     getUnfilledRoom: () => RoomController.getUnfilledRoom(),
   },
   Mutation: {
-    createRoom: async (_, args) => {
-      const user = new User({
-        name: `javi${Math.floor(Math.random() * 20)}`,
-        surname: `mar${Math.floor(Math.random() * 20)}`,
-        alias: `javito${Math.floor(Math.random() * 20)}`,
-      });
-      const newUser = await user.save();
+    createRoom: async (_, args, { user }) => {
       const room = new Room(args);
-      const steps = await initializeSteps(newUser.id);
+      const steps = await initializeSteps(user.userId);
       steps.map((step) => room.steps.push(step));
       const newRoom = await room.save();
       return newRoom.populate({

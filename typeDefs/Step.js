@@ -3,6 +3,7 @@ import { gql } from "apollo-server-express";
 const StepTypeDefs = gql`
   type UserWithAnswer {
     user: User,
+    bot: Bot,
     answerOne: Boolean,
     isAnswerOneCorrect: Boolean,
     answerTwo: Int

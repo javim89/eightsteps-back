@@ -10,12 +10,11 @@ const RoomSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
       },
-      answerOne: {
-        type: Boolean,
-        required: false,
-        default: null,
+      bot: {
+        type: Schema.Types.ObjectId,
+        ref: "UserBot",
       },
-      isAnswerOneCorrect: {
+      answerOne: {
         type: Boolean,
         required: false,
         default: null,

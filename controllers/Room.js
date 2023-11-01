@@ -7,7 +7,14 @@ const getAllRooms = async () => {
     path: "steps",
     populate: {
       path: "participants",
-      model: "User",
+      populate: [{
+        path: "user",
+        model: "User",
+      },
+      {
+        path: "bot",
+        model: "UserBot",
+      }],
     },
   });
   return rooms;
@@ -18,35 +25,17 @@ const getUnfilledRoom = async () => {
     status: "NEW",
   }).populate({
     path: "steps",
-    populate: [{
-      path: "participants",
-      populate: {
-        path: "user",
-        model: "User",
-      },
-    },
-    {
-      path: "category",
-      model: "Category",
-    },
-    {
-      path: "question",
-      model: "QuestionsAndAnswer",
-    }],
-  });
-  return unfilledRoom;
-};
-
-const getRoomById = async (_, { id }) => {
-  if (Types.ObjectId.isValid(id)) {
-    return Room.findById(id).populate({
-      path: "steps",
-      populate: [{
+    populate: [
+      {
         path: "participants",
-        populate: {
+        populate: [{
           path: "user",
           model: "User",
         },
+        {
+          path: "bot",
+          model: "UserBot",
+        }],
       },
       {
         path: "category",
@@ -55,7 +44,35 @@ const getRoomById = async (_, { id }) => {
       {
         path: "question",
         model: "QuestionsAndAnswer",
-      },
+      }],
+  });
+  return unfilledRoom;
+};
+
+const getRoomById = async (_, { id }) => {
+  if (Types.ObjectId.isValid(id)) {
+    return Room.findById(id).populate({
+      path: "steps",
+      populate: [
+        {
+          path: "participants",
+          populate: [{
+            path: "user",
+            model: "User",
+          },
+          {
+            path: "bot",
+            model: "UserBot",
+          }],
+        },
+        {
+          path: "category",
+          model: "Category",
+        },
+        {
+          path: "question",
+          model: "QuestionsAndAnswer",
+        },
       ],
     });
   }
