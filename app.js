@@ -53,7 +53,6 @@ const serverCleanup = useServer({
   // // Try to retrieve a user with the token
   // const user = await getUser(token);
   // Add the user to the context
-
   ,
 }, wsServer);
 
@@ -85,7 +84,7 @@ await server.start();
 startSchedulers(pubSub);
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "http://192.168.1.13:5173", "https://graphql.api.apollographql.com"],
+  origin: ["http://localhost:5173", "http://192.168.1.13:5173", "https://sandbox.embed.apollographql.com"],
   credentials: true, // <-- REQUIRED backend setting
 };
 
@@ -98,7 +97,6 @@ app.use("/graphql", cors(corsOptions), bodyParser.json(), expressMiddleware(serv
     // Cookies that have not been signed
     // console.log("token: ", req.cookies.token);
     // console.log("token: ", req.signedCookies.token);
-
     const token = req.cookies["auth-token"] || "";
     // Try to retrieve a user with the token
     const user = await getUser(token);

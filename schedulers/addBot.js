@@ -7,18 +7,13 @@ async function addBot(pubSub) {
 
   unfilledRooms.forEach(async (room) => {
     const { participants } = room.steps[7];
-    const bots = participants.filter((participant) => participant.bot);
-    // Get the count of all users
-    const botsAvailable = await UserBot.count({
-      id: {
-        $nin: bots.filter((bot) => bot.id),
+    const botsParticipants = participants.filter((participant) => participant.bot);
+
+    const userBot = await UserBot.findOne({
+      _id: {
+        $nin: botsParticipants.map((bot) => bot.bot.id),
       },
     }).exec();
-
-    const random = Math.floor(Math.random() * botsAvailable);
-
-    // Again query all users but only fetch one offset by our random #
-    const userBot = await UserBot.findOne().skip(random).exec();
     room.steps[7].participants.push({ bot: userBot });
     if (room.steps[7].participants.length === 8) {
       room.status = "PLAYING";

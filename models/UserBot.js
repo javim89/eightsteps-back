@@ -13,6 +13,10 @@ export const UserBotSchema = new Schema({
     type: String,
     required: false,
   },
+  responseTime: {
+    type: Number,
+    required: true,
+  },
 }, { timestamps: true });
 
 const UserBot = model("UserBot", UserBotSchema);

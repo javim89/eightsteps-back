@@ -19,6 +19,11 @@ const RoomSchema = new Schema({
         required: false,
         default: null,
       },
+      isAnswerOneCorrect: {
+        type: Boolean,
+        required: false,
+        default: null,
+      },
       answerTwo: {
         type: Number,
         required: false,
