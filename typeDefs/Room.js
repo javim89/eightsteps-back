@@ -20,7 +20,7 @@ const RoomTypeDefs = gql`
   type Mutation {
     createRoom(isPrivate: Boolean, name: String, password: String): Room,
     addParticipantToRoom(id:ID, alias: String): Room
-    checkAnswer(id: ID, answerId: ID, userId: ID, answer: Boolean): Boolean
+    checkAndSaveAnswer(answer: Boolean, roomId: ID): Boolean
   }
   type Subscription {
     roomSubscription(id: ID): Room

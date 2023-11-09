@@ -4,6 +4,7 @@ import Room from "../models/Room.js";
 import QuestionsAndAnswers from "../models/QuestionsAndAnswers.js";
 import Category from "../models/Category.js";
 import categories from "../utils/constants.js";
+import checkAnswer from "./QuestionAndAnswer.js";
 
 function getRandomInt() {
   return Math.floor(Math.random() * 10);
@@ -172,9 +173,45 @@ const createRoom = async (_, args, { user }) => {
     },
   });
 };
+
+const checkAndSaveAnswer = async (_, { answer, roomId }, { user, pubSub }) => {
+  const room = await Room.findById(roomId).populate({
+    path: "steps",
+    populate: [
+      {
+        path: "participants",
+        populate: [{
+          path: "user",
+          model: "User",
+        },
+        {
+          path: "bot",
+          model: "UserBot",
+        }],
+      },
+      {
+        path: "category",
+        model: "Category",
+      },
+      {
+        path: "question",
+        model: "QuestionsAndAnswer",
+      },
+    ],
+  });
+  const currentStep = room.steps[room.currentStep - 1];
+  const isAnswerOneCorrect = await checkAnswer(currentStep.question.id, answer);
+  const userOnRoom = currentStep.participants.find((cs) => cs.user?.alias === user.alias);
+  userOnRoom.answerOne = answer;
+  userOnRoom.isAnswerOneCorrect = isAnswerOneCorrect;
+
+  await room.save();
+  pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
+};
 export {
   getAllRooms,
   getRoomById,
   getUnfilledRoom,
   createRoom,
+  checkAndSaveAnswer,
 };

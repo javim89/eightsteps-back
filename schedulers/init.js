@@ -28,13 +28,4 @@ export default function startSchedulers(pubSub) {
       );
     });
   });
-  // new CronJob(
-  //   "*/5 * * * * *",
-  //   (() => {
-  //     answerQuestionBot(pubSub);
-  //   }),
-  //   null,
-  //   true,
-  //   "America/Los_Angeles",
-  // );
 }
