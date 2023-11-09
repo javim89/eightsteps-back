@@ -174,7 +174,7 @@ const createRoom = async (_, args, { user }) => {
   });
 };
 
-const checkAndSaveAnswer = async (_, { answer, roomId }, { user, pubSub }) => {
+const saveAndCheckAnswer = async (_, { answer, roomId }, { user, pubSub }) => {
   const room = await Room.findById(roomId).populate({
     path: "steps",
     populate: [
@@ -213,5 +213,5 @@ export {
   getRoomById,
   getUnfilledRoom,
   createRoom,
-  checkAndSaveAnswer,
+  saveAndCheckAnswer,
 };
