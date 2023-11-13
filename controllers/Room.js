@@ -200,13 +200,14 @@ const saveAndCheckAnswer = async (_, { answer, roomId }, { user, pubSub }) => {
     ],
   });
   const currentStep = room.steps[room.currentStep - 1];
-  const isAnswerOneCorrect = await checkAnswer(currentStep.question.id, answer);
+  const isAnswerCorrect = await checkAnswer(currentStep.question.id, answer);
   const userOnRoom = currentStep.participants.find((cs) => cs.user?.alias === user.alias);
   userOnRoom.answerOne = answer;
-  userOnRoom.isAnswerOneCorrect = isAnswerOneCorrect;
+  userOnRoom.isAnswerOneCorrect = isAnswerCorrect;
 
   await room.save();
   pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
+  return isAnswerCorrect;
 };
 export {
   getAllRooms,
