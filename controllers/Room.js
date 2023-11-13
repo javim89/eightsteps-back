@@ -209,10 +209,26 @@ const saveAndCheckAnswer = async (_, { answer, roomId }, { user, pubSub }) => {
   pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
   return isAnswerCorrect;
 };
+
+const resetAnswersRoom = async (_, { roomId }) => {
+  const room = await Room.findById(roomId);
+
+  room.steps[7].participants.forEach((participant) => {
+    const part = participant;
+    part.isAnswerOneCorrect = undefined;
+    part.answerOne = undefined;
+  });
+
+  await room.save();
+
+  return room;
+};
+
 export {
   getAllRooms,
   getRoomById,
   getUnfilledRoom,
   createRoom,
   saveAndCheckAnswer,
+  resetAnswersRoom,
 };

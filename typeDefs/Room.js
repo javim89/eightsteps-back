@@ -19,6 +19,7 @@ const RoomTypeDefs = gql`
   }
   type Mutation {
     createRoom(isPrivate: Boolean, name: String, password: String): Room,
+    resetAnswersRoom(roomId: ID): Room,
     addParticipantToRoom(id:ID, alias: String): Room
     saveAndCheckAnswer(answer: Boolean, roomId: ID): Boolean
   }

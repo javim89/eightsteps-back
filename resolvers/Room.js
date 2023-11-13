@@ -13,6 +13,7 @@ const RoomResolvers = {
   },
   Mutation: {
     createRoom: async (_, args, { user }) => RoomController.createRoom(_, args, { user }),
+    resetAnswersRoom: async (_, args) => RoomController.resetAnswersRoom(_, args),
     saveAndCheckAnswer: async (_, args, context) => RoomController.saveAndCheckAnswer(_, args, context),
     addParticipantToRoom: async (_, args, { pubSub }) => {
       const { id, alias } = args;
