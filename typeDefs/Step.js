@@ -6,7 +6,9 @@ const StepTypeDefs = gql`
     bot: Bot,
     answerOne: Boolean,
     isAnswerOneCorrect: Boolean,
-    answerTwo: Int
+    answerTwo: Int,
+    status: String,
+    showQuestion: Boolean,
   }
   type Step {
     id: ID,

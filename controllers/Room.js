@@ -3,8 +3,8 @@ import { GraphQLError } from "graphql";
 import Room from "../models/Room.js";
 import QuestionsAndAnswers from "../models/QuestionsAndAnswers.js";
 import Category from "../models/Category.js";
-import categories from "../utils/constants.js";
 import checkAnswer from "./QuestionAndAnswer.js";
+import { RoomStatusEnum, UserStatusEnum, categories } from "../utils/constants.js";
 
 function getRandomInt() {
   return Math.floor(Math.random() * 10);
@@ -98,7 +98,7 @@ const getAllRooms = async () => {
 
 const getUnfilledRoom = async () => {
   const unfilledRoom = await Room.find({
-    status: "NEW",
+    status: RoomStatusEnum.WAITING_USERS,
   }).populate({
     path: "steps",
     populate: [
@@ -199,12 +199,14 @@ const saveAndCheckAnswer = async (_, { answer, roomId }, { user, pubSub }) => {
       },
     ],
   });
-  const currentStep = room.steps[room.currentStep - 1];
+  const currentStep = room.steps[room.currentStep];
   const isAnswerCorrect = await checkAnswer(currentStep.question.id, answer);
   const userOnRoom = currentStep.participants.find((cs) => cs.user?.alias === user.alias);
+  const areAnswering = currentStep.participants.some((participant) => !participant.answerOne);
   userOnRoom.answerOne = answer;
   userOnRoom.isAnswerOneCorrect = isAnswerCorrect;
-
+  userOnRoom.status = areAnswering ? UserStatusEnum.WAITING : UserStatusEnum.ANSWERING;
+  userOnRoom.showQuestion = false;
   await room.save();
   pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
   return isAnswerCorrect;
@@ -217,6 +219,8 @@ const resetAnswersRoom = async (_, { roomId }) => {
     const part = participant;
     part.isAnswerOneCorrect = undefined;
     part.answerOne = undefined;
+    part.status = UserStatusEnum.ANSWERING;
+    part.showQuestion = true;
   });
 
   await room.save();

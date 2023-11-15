@@ -1,6 +1,6 @@
 import QuestionsAndAnswers from "../../models/QuestionsAndAnswers.js";
 import Category from "../../models/Category.js";
-import categories from "../../utils/constants.js";
+import { categories } from "../../utils/constants.js";
 
 export default async function geographyQuestions() {
   const geographyCategory = await Category.findOne({ name: categories.GEOGRAPHY }).exec();
@@ -14,7 +14,7 @@ export default async function geographyQuestions() {
       answer: true,
       category: geographyCategory,
     });
-    geographyQuestionAndAnswer.save();
+    await geographyQuestionAndAnswer.save();
 
     geographyQuestionAndAnswer = new QuestionsAndAnswers({
       question: "¿La Gran Muralla China es visible desde el espacio?",

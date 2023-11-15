@@ -4,6 +4,7 @@ import { GraphQLError } from "graphql";
 import Room from "../models/Room.js";
 import User from "../models/User.js";
 import * as RoomController from "../controllers/Room.js";
+import { UserStatusEnum, RoomStatusEnum } from "../utils/constants.js";
 
 const RoomResolvers = {
   Query: {
@@ -39,9 +40,13 @@ const RoomResolvers = {
         const participants = room.steps.reduce((prev, current) => prev + current.participants.length, 0);
         (participants >= 8) ? room.watching.push(newUser) : room.steps[7].participants.push({ user: newUser });
         if (room.steps[7].participants.length === 8) {
-          room.status = "PLAYING";
-          room.currentStep = 8;
-          room.showQuestion = true;
+          room.status = RoomStatusEnum.PLAYING;
+          room.currentStep = 7;
+          room.steps[7].participants.forEach((participant) => {
+            const part = participant;
+            part.showQuestion = true;
+            part.status = UserStatusEnum.ANSWERING;
+          });
         }
         await room.save();
         pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });

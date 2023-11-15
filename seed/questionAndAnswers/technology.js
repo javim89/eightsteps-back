@@ -1,6 +1,7 @@
+/* eslint-disable max-len */
 import QuestionsAndAnswers from "../../models/QuestionsAndAnswers.js";
 import Category from "../../models/Category.js";
-import categories from "../../utils/constants.js";
+import { categories } from "../../utils/constants.js";
 
 export default async function technologyQuestions() {
   const technologyCategory = await Category.findOne({ name: categories.TECHNOLOGY }).exec();
@@ -15,7 +16,7 @@ export default async function technologyQuestions() {
       helperText: "Android es desarrollado por Google, no por Apple.",
       category: technologyCategory,
     });
-    technologyQuestionAndAnswer.save();
+    await technologyQuestionAndAnswer.save();
 
     technologyQuestionAndAnswer = new QuestionsAndAnswers({
       question: "¿El término \"Inteligencia Artificial\" se refiere a la capacidad de las máquinas para realizar tareas que normalmente requieren la inteligencia humana?",

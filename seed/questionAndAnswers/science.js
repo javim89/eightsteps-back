@@ -1,6 +1,6 @@
 import QuestionsAndAnswers from "../../models/QuestionsAndAnswers.js";
 import Category from "../../models/Category.js";
-import categories from "../../utils/constants.js";
+import { categories } from "../../utils/constants.js";
 
 export default async function scienceQuestions() {
   const scienceCategory = await Category.findOne({ name: categories.SCIENCE }).exec();
@@ -15,7 +15,7 @@ export default async function scienceQuestions() {
       helperText: "Los electrones tienen carga negativa.",
       category: scienceCategory,
     });
-    scienceQuestionAndAnswer.save();
+    await scienceQuestionAndAnswer.save();
 
     scienceQuestionAndAnswer = new QuestionsAndAnswers({
       question: "¿La Tierra gira alrededor del Sol?",

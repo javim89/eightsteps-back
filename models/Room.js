@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { UserStatusEnum, RoomStatusEnum } from "../utils/constants.js";
 
 const RoomSchema = new Schema({
   isPrivate: Boolean,
@@ -29,6 +30,12 @@ const RoomSchema = new Schema({
         required: false,
         default: null,
       },
+      status: {
+        type: String,
+        enum: [UserStatusEnum.WAITING, UserStatusEnum.ANSWERING],
+        default: UserStatusEnum.WAITING,
+      },
+      showQuestion: Boolean,
     }],
     step: Number,
     category: {
@@ -47,11 +54,13 @@ const RoomSchema = new Schema({
   }],
   status: {
     type: String,
-    enum: ["NEW", "PLAYING", "FINISHED"],
-    default: "NEW",
+    enum: [RoomStatusEnum.WAITING_USERS, RoomStatusEnum.PLAYING, RoomStatusEnum.FINISHED],
+    default: RoomStatusEnum.WAITING_USERS,
   },
-  currentStep: Number,
-  showQuestion: Boolean,
+  currentStep: {
+    type: Number,
+    default: 7,
+  },
 }, { timestamps: true });
 
 const Room = model("Room", RoomSchema);

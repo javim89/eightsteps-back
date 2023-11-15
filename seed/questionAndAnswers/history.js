@@ -1,6 +1,6 @@
 import QuestionsAndAnswers from "../../models/QuestionsAndAnswers.js";
 import Category from "../../models/Category.js";
-import categories from "../../utils/constants.js";
+import { categories } from "../../utils/constants.js";
 
 export default async function historyQuestions() {
   const historyCategory = await Category.findOne({ name: categories.HISTORY }).exec();
@@ -8,13 +8,14 @@ export default async function historyQuestions() {
   const questionsAndAnswers = await QuestionsAndAnswers.find({
     category: historyCategory,
   });
+
   if (questionsAndAnswers.length === 0) {
     let historyQuestionAndAnswer = new QuestionsAndAnswers({
       question: "¿La Revolución de Mayo de 1810 en Argentina tuvo lugar el 25 de mayo?",
       answer: true,
       category: historyCategory,
     });
-    historyQuestionAndAnswer.save();
+    await historyQuestionAndAnswer.save();
 
     historyQuestionAndAnswer = new QuestionsAndAnswers({
       question: "¿Argentina obtuvo su independencia de España en 1820?",

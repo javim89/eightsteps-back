@@ -1,6 +1,6 @@
 import QuestionsAndAnswers from "../../models/QuestionsAndAnswers.js";
 import Category from "../../models/Category.js";
-import categories from "../../utils/constants.js";
+import { categories } from "../../utils/constants.js";
 
 export default async function sportQuestions() {
   const sportCategory = await Category.findOne({ name: categories.SPORTS }).exec();
@@ -14,7 +14,7 @@ export default async function sportQuestions() {
       answer: true,
       category: sportCategory,
     });
-    sportQuestionAndAnswer.save();
+    await sportQuestionAndAnswer.save();
 
     sportQuestionAndAnswer = new QuestionsAndAnswers({
       question: "¿El golfista Tiger Woods ha ganado más de 20 títulos de Grand Slam en su carrera?",

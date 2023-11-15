@@ -10,7 +10,6 @@ const RoomTypeDefs = gql`
     participants: Int,
     status: String,
     currentStep: Int,
-    showQuestion: Boolean
   }
   type Query {
     getAllRooms: [Room],

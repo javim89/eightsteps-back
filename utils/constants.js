@@ -1,4 +1,4 @@
-const categories = {
+export const categories = {
   HISTORY: "HISTORIA",
   CULTURE: "CULTURA",
   SPORTS: "DEPORTES",
@@ -9,4 +9,13 @@ const categories = {
   WINNER: "GANADOR",
 };
 
-export default categories;
+export const RoomStatusEnum = {
+  WAITING_USERS: "WAITING_USERS",
+  PLAYING: "PLAYING",
+  FINISHED: "FINISHED",
+};
+
+export const UserStatusEnum = {
+  WAITING: "WAITING",
+  ANSWERING: "ANSWERING",
+};

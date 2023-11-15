@@ -1,6 +1,7 @@
+/* eslint-disable max-len */
 import QuestionsAndAnswers from "../../models/QuestionsAndAnswers.js";
 import Category from "../../models/Category.js";
-import categories from "../../utils/constants.js";
+import { categories } from "../../utils/constants.js";
 
 export default async function cultureQuestions() {
   const cultureCategory = await Category.findOne({ name: categories.CULTURE }).exec();
@@ -14,7 +15,7 @@ export default async function cultureQuestions() {
       answer: true,
       category: cultureCategory,
     });
-    cultureQuestionAndAnswer.save();
+    await cultureQuestionAndAnswer.save();
 
     cultureQuestionAndAnswer = new QuestionsAndAnswers({
       question: "¿El mate es una bebida tradicional en Argentina, a menudo compartida en reuniones sociales?",

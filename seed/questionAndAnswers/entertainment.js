@@ -1,6 +1,6 @@
 import QuestionsAndAnswers from "../../models/QuestionsAndAnswers.js";
 import Category from "../../models/Category.js";
-import categories from "../../utils/constants.js";
+import { categories } from "../../utils/constants.js";
 
 export default async function entertainmentQuestions() {
   const entertainmentCategory = await Category.findOne({ name: categories.ENTERTAINMENT }).exec();
@@ -14,7 +14,7 @@ export default async function entertainmentQuestions() {
       answer: true,
       category: entertainmentCategory,
     });
-    entertainmentQuestionAndAnswer.save();
+    await entertainmentQuestionAndAnswer.save();
 
     entertainmentQuestionAndAnswer = new QuestionsAndAnswers({
       question: " ¿La película \"El Padrino\" fue dirigida por Martin Scorsese?",
