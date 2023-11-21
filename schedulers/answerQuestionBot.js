@@ -44,9 +44,18 @@ async function answerQuestionBot(bot, pubSub) {
       rooms.forEach((room) => {
         const currentStep = room.steps[room.currentStep];
         const botOnRoom = currentStep.participants.find((cs) => cs.bot?.id === bot.id);
-        botOnRoom.isAnswerOneCorrect = getRandomAnswer();
-        const areAnswering = currentStep.participants.some((participant) => !participant.answerOne);
-        botOnRoom.status = areAnswering ? UserStatusEnum.WAITING : UserStatusEnum.ANSWERING;
+        botOnRoom.isAnswerOneCorrect = false;
+        const areAnswering = currentStep.participants.some((participant) => participant.isAnswerOneCorrect === null);
+        if (areAnswering) {
+          botOnRoom.status = UserStatusEnum.WAITING;
+        } else {
+          const participantAnswerCorrect = currentStep.participants.filter((part) => part.isAnswerOneCorrect);
+          if (participantAnswerCorrect.length === 1) {
+            participantAnswerCorrect[0].status = UserStatusEnum.WINNER;
+            room.steps[room.currentStep - 1].participants.push({ user: participantAnswerCorrect[0].user });
+          }
+        }
+        botOnRoom.showQuestion = false;
         room.save();
         pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
       });

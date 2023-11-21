@@ -202,10 +202,18 @@ const saveAndCheckAnswer = async (_, { answer, roomId }, { user, pubSub }) => {
   const currentStep = room.steps[room.currentStep];
   const isAnswerCorrect = await checkAnswer(currentStep.question.id, answer);
   const userOnRoom = currentStep.participants.find((cs) => cs.user?.alias === user.alias);
-  const areAnswering = currentStep.participants.some((participant) => !participant.answerOne);
+  const areAnswering = currentStep.participants.some((participant) => participant.isAnswerOneCorrect === null);
   userOnRoom.answerOne = answer;
   userOnRoom.isAnswerOneCorrect = isAnswerCorrect;
-  userOnRoom.status = areAnswering ? UserStatusEnum.WAITING : UserStatusEnum.ANSWERING;
+  if (areAnswering) {
+    userOnRoom.status = UserStatusEnum.WAITING;
+  } else {
+    const participantAnswerCorrect = currentStep.participants.filter((part) => part.isAnswerOneCorrect);
+    if (participantAnswerCorrect.length === 1) {
+      participantAnswerCorrect[0].status = UserStatusEnum.WINNER;
+      room.steps[room.currentStep - 1].participants.push({ user: participantAnswerCorrect[0].user });
+    }
+  }
   userOnRoom.showQuestion = false;
   await room.save();
   pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
@@ -217,8 +225,8 @@ const resetAnswersRoom = async (_, { roomId }) => {
 
   room.steps[7].participants.forEach((participant) => {
     const part = participant;
-    part.isAnswerOneCorrect = undefined;
-    part.answerOne = undefined;
+    part.isAnswerOneCorrect = null;
+    part.answerOne = null;
     part.status = UserStatusEnum.ANSWERING;
     part.showQuestion = true;
   });

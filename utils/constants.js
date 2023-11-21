@@ -18,4 +18,5 @@ export const RoomStatusEnum = {
 export const UserStatusEnum = {
   WAITING: "WAITING",
   ANSWERING: "ANSWERING",
+  WINNER: "WINNER",
 };
