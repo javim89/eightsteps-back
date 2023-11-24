@@ -20,3 +20,8 @@ export const UserStatusEnum = {
   ANSWERING: "ANSWERING",
   WINNER: "WINNER",
 };
+
+export const QuestionsTypeEnum = {
+  BOOLEAN: "BOOLEAN",
+  NUMERIC: "NUMERIC",
+};

@@ -79,7 +79,7 @@ const server = new ApolloServer({
   ],
 });
 
-startSeeders();
+await startSeeders();
 await server.start();
 startSchedulers(pubSub);
 

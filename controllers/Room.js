@@ -5,6 +5,7 @@ import QuestionsAndAnswers from "../models/QuestionsAndAnswers.js";
 import Category from "../models/Category.js";
 import checkAnswer from "./QuestionAndAnswer.js";
 import { RoomStatusEnum, UserStatusEnum, categories } from "../utils/constants.js";
+import checkWinners from "../services/Room.js";
 
 function getRandomInt() {
   return Math.floor(Math.random() * 10);
@@ -202,17 +203,13 @@ const saveAndCheckAnswer = async (_, { answer, roomId }, { user, pubSub }) => {
   const currentStep = room.steps[room.currentStep];
   const isAnswerCorrect = await checkAnswer(currentStep.question.id, answer);
   const userOnRoom = currentStep.participants.find((cs) => cs.user?.alias === user.alias);
-  const areAnswering = currentStep.participants.some((participant) => participant.isAnswerOneCorrect === null);
   userOnRoom.answerOne = answer;
   userOnRoom.isAnswerOneCorrect = isAnswerCorrect;
+  const areAnswering = currentStep.participants.some((participant) => participant.isAnswerOneCorrect === null);
   if (areAnswering) {
     userOnRoom.status = UserStatusEnum.WAITING;
   } else {
-    const participantAnswerCorrect = currentStep.participants.filter((part) => part.isAnswerOneCorrect);
-    if (participantAnswerCorrect.length === 1) {
-      participantAnswerCorrect[0].status = UserStatusEnum.WINNER;
-      room.steps[room.currentStep - 1].participants.push({ user: participantAnswerCorrect[0].user });
-    }
+    checkWinners(currentStep, room);
   }
   userOnRoom.showQuestion = false;
   await room.save();
@@ -222,7 +219,13 @@ const saveAndCheckAnswer = async (_, { answer, roomId }, { user, pubSub }) => {
 
 const resetAnswersRoom = async (_, { roomId }) => {
   const room = await Room.findById(roomId);
-
+  room.steps[0].participants = [];
+  room.steps[1].participants = [];
+  room.steps[2].participants = [];
+  room.steps[3].participants = [];
+  room.steps[4].participants = [];
+  room.steps[5].participants = [];
+  room.steps[6].participants = [];
   room.steps[7].participants.forEach((participant) => {
     const part = participant;
     part.isAnswerOneCorrect = null;
@@ -230,7 +233,7 @@ const resetAnswersRoom = async (_, { roomId }) => {
     part.status = UserStatusEnum.ANSWERING;
     part.showQuestion = true;
   });
-
+  room.currentStep = 7;
   await room.save();
 
   return room;

@@ -4,7 +4,8 @@ const QuestionTypeDefs = gql`
   type Question {
     id: ID,
     question: String,
-    helperText: String
+    helperText: String,
+    type: String
   }
 `;
 

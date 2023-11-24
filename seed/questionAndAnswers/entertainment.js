@@ -1,6 +1,6 @@
 import QuestionsAndAnswers from "../../models/QuestionsAndAnswers.js";
 import Category from "../../models/Category.js";
-import { categories } from "../../utils/constants.js";
+import { QuestionsTypeEnum, categories } from "../../utils/constants.js";
 
 export default async function entertainmentQuestions() {
   const entertainmentCategory = await Category.findOne({ name: categories.ENTERTAINMENT }).exec();
@@ -13,6 +13,7 @@ export default async function entertainmentQuestions() {
       question: "¿El actor argentino Ricardo Darín protagonizó la película \"El Secreto de sus Ojos\"?",
       answer: true,
       category: entertainmentCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await entertainmentQuestionAndAnswer.save();
 
@@ -21,6 +22,7 @@ export default async function entertainmentQuestions() {
       answer: false,
       helperText: "\"El Padrino\" fue dirigida por Francis Ford Coppola",
       category: entertainmentCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await entertainmentQuestionAndAnswer.save();
 
@@ -29,6 +31,7 @@ export default async function entertainmentQuestions() {
       answer: false,
       helperText: "\"The Beatles\" se formó en Liverpool, Reino Unido",
       category: entertainmentCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await entertainmentQuestionAndAnswer.save();
 
@@ -36,6 +39,7 @@ export default async function entertainmentQuestions() {
       question: "¿La serie de televisión \"Breaking Bad\" está ambientada en Albuquerque, Nuevo México?",
       answer: true,
       category: entertainmentCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await entertainmentQuestionAndAnswer.save();
 
@@ -43,6 +47,7 @@ export default async function entertainmentQuestions() {
       question: "¿El libro \"Cien años de soledad\" fue escrito por el autor colombiano Gabriel García Márquez?",
       answer: true,
       category: entertainmentCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await entertainmentQuestionAndAnswer.save();
 
@@ -50,6 +55,7 @@ export default async function entertainmentQuestions() {
       question: "¿El videojuego \"Super Mario Bros.\" fue lanzado por primera vez en la década de 1980?",
       answer: true,
       category: entertainmentCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await entertainmentQuestionAndAnswer.save();
 
@@ -57,6 +63,7 @@ export default async function entertainmentQuestions() {
       question: "¿El actor Johnny Depp interpretó al pirata Jack Sparrow en la saga de películas \"Piratas del Caribe\"?",
       answer: true,
       category: entertainmentCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await entertainmentQuestionAndAnswer.save();
 
@@ -64,6 +71,7 @@ export default async function entertainmentQuestions() {
       question: "¿La serie de televisión \"Friends\" se desarrolla en la ciudad de Nueva York?",
       answer: true,
       category: entertainmentCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await entertainmentQuestionAndAnswer.save();
 
@@ -72,6 +80,7 @@ export default async function entertainmentQuestions() {
       answer: false,
       helperText: "\"Forrest Gump\" está basada en una novela escrita por Winston Groom.",
       category: entertainmentCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await entertainmentQuestionAndAnswer.save();
 
@@ -79,6 +88,23 @@ export default async function entertainmentQuestions() {
       question: "¿El videojuego \"Minecraft\" fue creado por la empresa Mojang?",
       answer: true,
       category: entertainmentCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
+    });
+    await entertainmentQuestionAndAnswer.save();
+
+    entertainmentQuestionAndAnswer = new QuestionsAndAnswers({
+      question: "¿Cuántos episodios tiene la serie de televisión argentina \"Los Simuladores\" en su totalidad?",
+      answer: 22,
+      category: entertainmentCategory,
+      type: QuestionsTypeEnum.NUMERIC,
+    });
+    await entertainmentQuestionAndAnswer.save();
+
+    entertainmentQuestionAndAnswer = new QuestionsAndAnswers({
+      question: "¿Cuántos Oscar ganó la película argentina \"El Secreto de Sus Ojos\" en la ceremonia de los premios de la Academia en 2010?",
+      answer: 1,
+      category: entertainmentCategory,
+      type: QuestionsTypeEnum.NUMERIC,
     });
     await entertainmentQuestionAndAnswer.save();
   }

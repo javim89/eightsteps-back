@@ -1,6 +1,6 @@
 import QuestionsAndAnswers from "../../models/QuestionsAndAnswers.js";
 import Category from "../../models/Category.js";
-import { categories } from "../../utils/constants.js";
+import { QuestionsTypeEnum, categories } from "../../utils/constants.js";
 
 export default async function sportQuestions() {
   const sportCategory = await Category.findOne({ name: categories.SPORTS }).exec();
@@ -13,6 +13,7 @@ export default async function sportQuestions() {
       question: "¿Usain Bolt ostenta el récord mundial de los 100 metros lisos?",
       answer: true,
       category: sportCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await sportQuestionAndAnswer.save();
 
@@ -21,6 +22,7 @@ export default async function sportQuestions() {
       answer: false,
       helperText: "Tiger Woods ha ganado 15 títulos de Grand Slam.",
       category: sportCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await sportQuestionAndAnswer.save();
 
@@ -28,6 +30,7 @@ export default async function sportQuestions() {
       question: "¿La Copa Mundial de la FIFA se celebra cada cuatro años?",
       answer: true,
       category: sportCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await sportQuestionAndAnswer.save();
 
@@ -36,6 +39,7 @@ export default async function sportQuestions() {
       answer: false,
       helperText: "Rafael Nadal es conocido como \"El Rey de la Tierra Batida.\"",
       category: sportCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await sportQuestionAndAnswer.save();
 
@@ -43,6 +47,7 @@ export default async function sportQuestions() {
       question: "¿La Copa América es un torneo de fútbol de selecciones nacionales de América del Sur?",
       answer: true,
       category: sportCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await sportQuestionAndAnswer.save();
 
@@ -50,6 +55,7 @@ export default async function sportQuestions() {
       question: "¿El maratonista Eliud Kipchoge es conocido por ser el primer ser humano en correr un maratón en menos de 2 horas?",
       answer: true,
       category: sportCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await sportQuestionAndAnswer.save();
 
@@ -57,6 +63,7 @@ export default async function sportQuestions() {
       question: "¿El Super Bowl es el evento deportivo más visto en Estados Unidos cada año?",
       answer: true,
       category: sportCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await sportQuestionAndAnswer.save();
 
@@ -64,6 +71,7 @@ export default async function sportQuestions() {
       question: "¿El ciclista Lance Armstrong fue despojado de sus siete títulos del Tour de Francia debido a un escándalo de dopaje?",
       answer: true,
       category: sportCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await sportQuestionAndAnswer.save();
 
@@ -71,6 +79,7 @@ export default async function sportQuestions() {
       question: "¿La gimnasta Simone Biles es considerada una de las más grandes gimnastas de todos los tiempos?",
       answer: true,
       category: sportCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await sportQuestionAndAnswer.save();
 
@@ -78,6 +87,24 @@ export default async function sportQuestions() {
       question: "¿El baloncestista Michael Jordan jugó la mayor parte de su carrera en los Chicago Bulls?",
       answer: true,
       category: sportCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
+    });
+    await sportQuestionAndAnswer.save();
+
+    sportQuestionAndAnswer = new QuestionsAndAnswers({
+      question: "¿Cuántos jugadores conforman un equipo de fútbol en Argentina durante un partido?",
+      answer: 11,
+      category: sportCategory,
+      type: QuestionsTypeEnum.NUMERIC,
+    });
+    await sportQuestionAndAnswer.save();
+
+    sportQuestionAndAnswer = new QuestionsAndAnswers({
+      question: "¿Cuántas copas mundiales tiene la selección Argentina de fútbol?",
+      answer: 3,
+      category: sportCategory,
+      type: QuestionsTypeEnum.NUMERIC,
+      helperText: "La selección argentina de fútbol ha ganado la Copa Mundial de la FIFA en dos ocasiones: en 1978, en 1986 y 2022",
     });
     await sportQuestionAndAnswer.save();
   }

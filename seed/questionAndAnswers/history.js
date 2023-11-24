@@ -1,6 +1,6 @@
 import QuestionsAndAnswers from "../../models/QuestionsAndAnswers.js";
 import Category from "../../models/Category.js";
-import { categories } from "../../utils/constants.js";
+import { QuestionsTypeEnum, categories } from "../../utils/constants.js";
 
 export default async function historyQuestions() {
   const historyCategory = await Category.findOne({ name: categories.HISTORY }).exec();
@@ -14,6 +14,7 @@ export default async function historyQuestions() {
       question: "¿La Revolución de Mayo de 1810 en Argentina tuvo lugar el 25 de mayo?",
       answer: true,
       category: historyCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await historyQuestionAndAnswer.save();
 
@@ -22,6 +23,7 @@ export default async function historyQuestions() {
       answer: false,
       helperText: "La independencia de Argentina se declaró el 9 de julio de 1816.",
       category: historyCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await historyQuestionAndAnswer.save();
 
@@ -29,6 +31,7 @@ export default async function historyQuestions() {
       question: "¿Juan Domingo Perón fue presidente de Argentina en tres ocasiones no consecutivas?",
       answer: true,
       category: historyCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await historyQuestionAndAnswer.save();
 
@@ -36,6 +39,7 @@ export default async function historyQuestions() {
       question: "¿La Guerra de las Malvinas entre Argentina y el Reino Unido ocurrió en la década de 1980?",
       answer: true,
       category: historyCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await historyQuestionAndAnswer.save();
 
@@ -43,6 +47,7 @@ export default async function historyQuestions() {
       question: "¿La Constitución Nacional de Argentina se promulgó en 1853?",
       answer: true,
       category: historyCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await historyQuestionAndAnswer.save();
 
@@ -50,6 +55,7 @@ export default async function historyQuestions() {
       question: "¿La Revolución de 1890 en Argentina fue un levantamiento militar contra el gobierno de Miguel Juárez Celman?",
       answer: true,
       category: historyCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await historyQuestionAndAnswer.save();
 
@@ -57,6 +63,7 @@ export default async function historyQuestions() {
       question: "¿Argentina se convirtió en un país independiente de facto en 1810?",
       answer: true,
       category: historyCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await historyQuestionAndAnswer.save();
 
@@ -65,6 +72,7 @@ export default async function historyQuestions() {
       answer: false,
       category: historyCategory,
       helperText: "La \"Década Infame\" se refiere a un período de corrupción y fraude electoral en la década de 1930",
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await historyQuestionAndAnswer.save();
 
@@ -72,6 +80,7 @@ export default async function historyQuestions() {
       question: "¿La Guerra del Paraguay (1864-1870) involucró a Argentina, Brasil y Uruguay en una lucha contra Paraguay?",
       answer: true,
       category: historyCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
     });
     await historyQuestionAndAnswer.save();
 
@@ -79,6 +88,25 @@ export default async function historyQuestions() {
       question: "¿Eva Perón fue la primera mujer en Argentina en aspirar a la presidencia?",
       answer: true,
       category: historyCategory,
+      type: QuestionsTypeEnum.BOOLEAN,
+    });
+    await historyQuestionAndAnswer.save();
+
+    historyQuestionAndAnswer = new QuestionsAndAnswers({
+      question: "¿En qué año se declaró la independencia de Argentina?",
+      answer: 1816,
+      category: historyCategory,
+      type: QuestionsTypeEnum.NUMERIC,
+      helperText: "La independencia de Argentina fue declarada el 9 de julio de 1816.",
+    });
+    await historyQuestionAndAnswer.save();
+
+    historyQuestionAndAnswer = new QuestionsAndAnswers({
+      question: "¿En qué año tuvo lugar la Revolución de Mayo",
+      answer: 1810,
+      category: historyCategory,
+      type: QuestionsTypeEnum.NUMERIC,
+      helperText: "La Revolución de Mayo ocurrió en 1810.",
     });
     await historyQuestionAndAnswer.save();
   }
