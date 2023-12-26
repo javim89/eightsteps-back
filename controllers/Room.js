@@ -4,34 +4,43 @@ import Room from "../models/Room.js";
 import QuestionsAndAnswers from "../models/QuestionsAndAnswers.js";
 import Category from "../models/Category.js";
 import checkAnswer from "./QuestionAndAnswer.js";
-import { RoomStatusEnum, UserStatusEnum, categories } from "../utils/constants.js";
+import {
+  RoomStatusEnum, UserStatusEnum, QuestionsTypeEnum, categories,
+} from "../utils/constants.js";
 import checkWinners from "../services/Room.js";
 
-function getRandomInt() {
-  return Math.floor(Math.random() * 10);
+function getRandomInt(num) {
+  return Math.floor(Math.random() * num);
 }
 
 const initializeSteps = async (userId) => {
   const historyCategory = await Category.findOne({ name: categories.HISTORY }).exec();
-  const historyQuestion = await QuestionsAndAnswers.find({ category: historyCategory }).exec();
+  const historyQuestionOne = await QuestionsAndAnswers.find({ category: historyCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
+  const historyQuestionTwo = await QuestionsAndAnswers.find({ category: historyCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
 
   const cultureCategory = await Category.findOne({ name: categories.CULTURE }).exec();
-  const cultureQuestion = await QuestionsAndAnswers.find({ category: historyCategory }).exec();
+  const cultureQuestionOne = await QuestionsAndAnswers.find({ category: cultureCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
+  const cultureQuestionTwo = await QuestionsAndAnswers.find({ category: cultureCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
 
   const sportCategory = await Category.findOne({ name: categories.SPORTS }).exec();
-  const sportQuestion = await QuestionsAndAnswers.find({ category: sportCategory }).exec();
+  const sportQuestionOne = await QuestionsAndAnswers.find({ category: sportCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
+  const sportQuestionTwo = await QuestionsAndAnswers.find({ category: sportCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
 
   const geographyCategory = await Category.findOne({ name: categories.GEOGRAPHY }).exec();
-  const geographyQuestion = await QuestionsAndAnswers.find({ category: geographyCategory }).exec();
+  const geographyQuestionOne = await QuestionsAndAnswers.find({ category: geographyCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
+  const geographyQuestionTwo = await QuestionsAndAnswers.find({ category: geographyCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
 
   const technologyCategory = await Category.findOne({ name: categories.TECHNOLOGY }).exec();
-  const technologyQuestion = await QuestionsAndAnswers.find({ category: technologyCategory }).exec();
+  const technologyQuestionOne = await QuestionsAndAnswers.find({ category: technologyCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
+  const technologyQuestionTwo = await QuestionsAndAnswers.find({ category: technologyCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
 
   const entertainmentCategory = await Category.findOne({ name: categories.ENTERTAINMENT }).exec();
-  const entertainmentQuestion = await QuestionsAndAnswers.find({ category: entertainmentCategory }).exec();
+  const entertainmentQuestionOne = await QuestionsAndAnswers.find({ category: entertainmentCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
+  const entertainmentQuestionTwo = await QuestionsAndAnswers.find({ category: entertainmentCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
 
   const scienceCategory = await Category.findOne({ name: categories.SCIENCE }).exec();
-  const scienceQuestion = await QuestionsAndAnswers.find({ category: scienceCategory }).exec();
+  const scienceQuestionOne = await QuestionsAndAnswers.find({ category: scienceCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
+  const scienceQuestionTwo = await QuestionsAndAnswers.find({ category: scienceCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
 
   const winnerCategory = await Category.findOne({ name: categories.WINNER }).exec();
 
@@ -39,37 +48,58 @@ const initializeSteps = async (userId) => {
     step: 8,
     category: historyCategory,
     participants: [{ user: userId }],
-    question: historyQuestion[getRandomInt()],
+    questions: [
+      historyQuestionOne[getRandomInt(historyQuestionOne.length)],
+      historyQuestionTwo[getRandomInt(historyQuestionTwo.length)],
+    ],
   };
   const step7 = {
     step: 7,
     category: cultureCategory,
-    question: cultureQuestion[getRandomInt()],
+    questions: [
+      cultureQuestionOne[getRandomInt(cultureQuestionOne.length)],
+      cultureQuestionTwo[getRandomInt(cultureQuestionTwo.length)],
+    ],
   };
   const step6 = {
     step: 6,
     category: sportCategory,
-    question: sportQuestion[getRandomInt()],
+    questions: [
+      sportQuestionOne[getRandomInt(sportQuestionOne.length)],
+      sportQuestionTwo[getRandomInt(sportQuestionTwo.length)],
+    ],
   };
   const step5 = {
     step: 5,
     category: geographyCategory,
-    question: geographyQuestion[getRandomInt()],
+    questions: [
+      geographyQuestionOne[getRandomInt(geographyQuestionOne.length)],
+      geographyQuestionTwo[getRandomInt(geographyQuestionTwo.length)],
+    ],
   };
   const step4 = {
     step: 4,
     category: technologyCategory,
-    question: technologyQuestion[getRandomInt()],
+    questions: [
+      technologyQuestionOne[getRandomInt(technologyQuestionOne.length)],
+      technologyQuestionTwo[getRandomInt(technologyQuestionTwo.length)],
+    ],
   };
   const step3 = {
     step: 3,
     category: entertainmentCategory,
-    question: entertainmentQuestion[getRandomInt()],
+    questions: [
+      entertainmentQuestionOne[getRandomInt(entertainmentQuestionOne.length)],
+      entertainmentQuestionTwo[getRandomInt(entertainmentQuestionTwo.length)],
+    ],
   };
   const step2 = {
     step: 2,
     category: scienceCategory,
-    question: scienceQuestion[getRandomInt()],
+    questions: [
+      scienceQuestionOne[getRandomInt(scienceQuestionOne.length)],
+      scienceQuestionTwo[getRandomInt(scienceQuestionTwo.length)],
+    ],
   };
   const step1 = {
     step: 1,
@@ -119,7 +149,7 @@ const getUnfilledRoom = async () => {
         model: "Category",
       },
       {
-        path: "question",
+        path: "questions",
         model: "QuestionsAndAnswer",
       }],
   });
@@ -147,7 +177,7 @@ const getRoomById = async (_, { id }) => {
           model: "Category",
         },
         {
-          path: "question",
+          path: "questions",
           model: "QuestionsAndAnswer",
         },
       ],
@@ -195,23 +225,39 @@ const saveAndCheckAnswer = async (_, { answer, roomId }, { user, pubSub }) => {
         model: "Category",
       },
       {
-        path: "question",
+        path: "questions",
         model: "QuestionsAndAnswer",
       },
     ],
   });
   const currentStep = room.steps[room.currentStep];
-  const isAnswerCorrect = await checkAnswer(currentStep.question.id, answer);
-  const userOnRoom = currentStep.participants.find((cs) => cs.user?.alias === user.alias);
-  userOnRoom.answerOne = answer;
-  userOnRoom.isAnswerOneCorrect = isAnswerCorrect;
-  const areAnswering = currentStep.participants.some((participant) => participant.isAnswerOneCorrect === null);
+  const { askQuestion } = currentStep;
+  const isAnswerCorrect = await checkAnswer(currentStep.questions[askQuestion].id, answer);
+  const userOnStep = currentStep.participants.find((cs) => cs.user?.alias === user.alias);
+  const { type } = currentStep.questions[askQuestion];
+  if (type === QuestionsTypeEnum.BOOLEAN) {
+    userOnStep.answers[askQuestion] = {
+      answer,
+      isAnswerCorrect,
+    };
+  } else {
+    userOnStep.answers[askQuestion] = {
+      answer,
+    };
+  }
+  const areAnswering = currentStep.participants.some((participant) => participant.answers[askQuestion] === undefined);
   if (areAnswering) {
-    userOnRoom.status = UserStatusEnum.WAITING;
+    userOnStep.status = UserStatusEnum.WAITING;
   } else {
     checkWinners(currentStep, room);
+    if (currentStep.askQuestion !== currentStep.questions.length) currentStep.askQuestion += 1;
+    currentStep.participants.forEach((part) => {
+      const par = part;
+      par.status = UserStatusEnum.ANSWERING;
+      par.showQuestion = true;
+    });
   }
-  userOnRoom.showQuestion = false;
+  userOnStep.showQuestion = !areAnswering;
   await room.save();
   pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
   return isAnswerCorrect;
@@ -228,8 +274,7 @@ const resetAnswersRoom = async (_, { roomId }) => {
   room.steps[6].participants = [];
   room.steps[7].participants.forEach((participant) => {
     const part = participant;
-    part.isAnswerOneCorrect = null;
-    part.answerOne = null;
+    part.answers = [];
     part.status = UserStatusEnum.ANSWERING;
     part.showQuestion = true;
   });

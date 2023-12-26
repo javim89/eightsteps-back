@@ -1,7 +1,7 @@
 import { UserStatusEnum } from "../utils/constants.js";
 
 const checkWinners = (currentStep, room) => {
-  const participantAnswerCorrect = currentStep.participants.filter((part) => part.isAnswerOneCorrect);
+  const participantAnswerCorrect = currentStep.participants.filter((part) => part.answers[currentStep.askQuestion].isAnswerCorrect);
 
   if (participantAnswerCorrect.length === 1) {
     participantAnswerCorrect[0].status = UserStatusEnum.WINNER;

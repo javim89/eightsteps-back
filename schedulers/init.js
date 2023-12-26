@@ -6,7 +6,7 @@ import UserBot from "../models/UserBot.js";
 
 export default function startSchedulers(pubSub) {
   new CronJob(
-    "*/5 * * * * *",
+    "*/1 * * * * *",
     (() => {
       addBot(pubSub);
     }),

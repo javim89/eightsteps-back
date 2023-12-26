@@ -1,6 +1,7 @@
 import { gql } from "apollo-server-express";
 
 const RoomTypeDefs = gql`
+  scalar Any
   type Room {
     id: ID,
     isPrivate: Boolean,
@@ -20,7 +21,7 @@ const RoomTypeDefs = gql`
     createRoom(isPrivate: Boolean, name: String, password: String): Room,
     resetAnswersRoom(roomId: ID): Room,
     addParticipantToRoom(id:ID, alias: String): Room
-    saveAndCheckAnswer(answer: Boolean, roomId: ID): Boolean
+    saveAndCheckAnswer(answer: Any, roomId: ID): Boolean
   }
   type Subscription {
     roomSubscription(id: ID): Room

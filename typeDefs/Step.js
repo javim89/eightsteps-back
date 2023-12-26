@@ -1,12 +1,16 @@
 import { gql } from "apollo-server-express";
 
 const StepTypeDefs = gql`
+  scalar Any
+
+  type Answer {
+    answer: Any
+    isAnswerCorrect: Boolean
+  }
   type UserWithAnswer {
     user: User,
     bot: Bot,
-    answerOne: Boolean,
-    isAnswerOneCorrect: Boolean,
-    answerTwo: Int,
+    answers: [Answer],
     status: String,
     showQuestion: Boolean,
   }
@@ -15,7 +19,8 @@ const StepTypeDefs = gql`
     participants: [UserWithAnswer],
     step: Int,
     category: Category,
-    question: Question,
+    askQuestion: Int,
+    questions: [Question],
   }
 `;
 

@@ -15,21 +15,18 @@ const RoomSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "UserBot",
       },
-      answerOne: {
-        type: Boolean,
-        required: false,
-        default: null,
-      },
-      isAnswerOneCorrect: {
-        type: Boolean,
-        required: false,
-        default: null,
-      },
-      answerTwo: {
-        type: Number,
-        required: false,
-        default: null,
-      },
+      answers: [{
+        answer: {
+          type: Schema.Types.Mixed,
+          required: false,
+          default: null,
+        },
+        isAnswerCorrect: {
+          type: Boolean,
+          required: false,
+          default: null,
+        },
+      }],
       status: {
         type: String,
         enum: [UserStatusEnum.WAITING, UserStatusEnum.ANSWERING, UserStatusEnum.WINNER],
@@ -37,16 +34,21 @@ const RoomSchema = new Schema({
       },
       showQuestion: Boolean,
     }],
+    askQuestion: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
     step: Number,
     category: {
       type: Schema.Types.ObjectId,
       ref: "Category",
     },
-    question: {
+    questions: [{
       type: Schema.Types.ObjectId,
       ref: "QuestionsAndAnswers",
       required: false,
-    },
+    }],
   }],
   watching: [{
     type: Schema.Types.ObjectId,

@@ -1,18 +1,20 @@
-import { RoomStatusEnum, UserStatusEnum } from "../utils/constants.js";
+import { RoomStatusEnum, UserStatusEnum, QuestionsTypeEnum } from "../utils/constants.js";
 import Room from "../models/Room.js";
 import checkWinners from "../services/Room.js";
 
 const getRandomAnswer = () => Math.random() < 0.5;
+
+const getRandomInt = () => Math.floor(Math.random() * 600);
 
 async function answerQuestionBot(bot, pubSub) {
   Room.find({
     status: RoomStatusEnum.PLAYING,
     "steps.participants": {
       $elemMatch: {
-        isAnswerOneCorrect: null,
         bot: {
           _id: bot.id,
         },
+        status: UserStatusEnum.ANSWERING,
       },
     },
   })
@@ -35,7 +37,7 @@ async function answerQuestionBot(bot, pubSub) {
           model: "Category",
         },
         {
-          path: "question",
+          path: "questions",
           model: "QuestionsAndAnswer",
         },
       ],
@@ -44,16 +46,33 @@ async function answerQuestionBot(bot, pubSub) {
     .then((rooms) => {
       rooms.forEach((room) => {
         const currentStep = room.steps[room.currentStep];
-        const botOnRoom = currentStep.participants.find((cs) => cs.bot?.id === bot.id);
-        if (botOnRoom) {
-          botOnRoom.isAnswerOneCorrect = getRandomAnswer();
-          const areAnswering = currentStep.participants.some((participant) => participant.isAnswerOneCorrect === null);
+        const botOnStep = currentStep.participants.find((cs) => cs.bot?.id === bot.id);
+        const { askQuestion } = currentStep;
+        if (botOnStep) {
+          const { type } = currentStep.questions[askQuestion];
+          if (type === QuestionsTypeEnum.BOOLEAN) {
+            const isAnswerCorrect = getRandomAnswer();
+            botOnStep.answers[askQuestion] = {
+              isAnswerCorrect,
+            };
+          } else {
+            botOnStep.answers[askQuestion] = {
+              answer: getRandomInt(),
+            };
+          }
+          const areAnswering = currentStep.participants.some((participant) => participant.answers[askQuestion] === undefined);
           if (areAnswering) {
-            botOnRoom.status = UserStatusEnum.WAITING;
+            botOnStep.status = UserStatusEnum.WAITING;
           } else {
             checkWinners(currentStep, room);
+            if (currentStep.askQuestion !== currentStep.questions.length) currentStep.askQuestion += 1;
+            currentStep.participants.forEach((part) => {
+              const par = part;
+              par.status = UserStatusEnum.ANSWERING;
+              par.showQuestion = true;
+            });
           }
-          botOnRoom.showQuestion = false;
+          botOnStep.showQuestion = !areAnswering;
           room.save();
           pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
         }
