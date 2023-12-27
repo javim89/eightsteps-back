@@ -61,18 +61,14 @@ async function answerQuestionBot(bot, pubSub) {
             };
           }
           const areAnswering = currentStep.participants.some((participant) => participant.answers[askQuestion] === undefined);
+          botOnStep.showQuestion = false;
+          pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
           if (areAnswering) {
             botOnStep.status = UserStatusEnum.WAITING;
           } else {
             checkWinners(currentStep, room);
             if (currentStep.askQuestion !== currentStep.questions.length) currentStep.askQuestion += 1;
-            currentStep.participants.forEach((part) => {
-              const par = part;
-              par.status = UserStatusEnum.ANSWERING;
-              par.showQuestion = true;
-            });
           }
-          botOnStep.showQuestion = !areAnswering;
           room.save();
           pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
         }

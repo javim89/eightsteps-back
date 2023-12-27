@@ -19,6 +19,7 @@ export const UserStatusEnum = {
   WAITING: "WAITING",
   ANSWERING: "ANSWERING",
   WINNER: "WINNER",
+  LOOSER: "LOOSER",
 };
 
 export const QuestionsTypeEnum = {

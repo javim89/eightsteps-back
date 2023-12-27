@@ -29,7 +29,7 @@ const RoomSchema = new Schema({
       }],
       status: {
         type: String,
-        enum: [UserStatusEnum.WAITING, UserStatusEnum.ANSWERING, UserStatusEnum.WINNER],
+        enum: [UserStatusEnum.WAITING, UserStatusEnum.ANSWERING, UserStatusEnum.WINNER, UserStatusEnum.LOOSER],
         default: UserStatusEnum.WAITING,
       },
       showQuestion: Boolean,

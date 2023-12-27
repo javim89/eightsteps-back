@@ -31,7 +31,7 @@ const UserResolvers = {
       res.cookie("auth-token", token, {
         httpOnly: true,
         secure: true,
-        maxAge: 3600000,
+        maxAge: 3600000 * 2,
         sameSite: "none",
       });
 

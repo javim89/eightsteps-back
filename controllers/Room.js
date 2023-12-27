@@ -15,32 +15,32 @@ function getRandomInt(num) {
 
 const initializeSteps = async (userId) => {
   const historyCategory = await Category.findOne({ name: categories.HISTORY }).exec();
-  const historyQuestionOne = await QuestionsAndAnswers.find({ category: historyCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
-  const historyQuestionTwo = await QuestionsAndAnswers.find({ category: historyCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
+  const historyBooleanQuestion = await QuestionsAndAnswers.find({ category: historyCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
+  const historyNumericQuestion = await QuestionsAndAnswers.find({ category: historyCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
 
   const cultureCategory = await Category.findOne({ name: categories.CULTURE }).exec();
-  const cultureQuestionOne = await QuestionsAndAnswers.find({ category: cultureCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
-  const cultureQuestionTwo = await QuestionsAndAnswers.find({ category: cultureCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
+  const cultureBooleanQuestion = await QuestionsAndAnswers.find({ category: cultureCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
+  const cultureNumericQuestion = await QuestionsAndAnswers.find({ category: cultureCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
 
   const sportCategory = await Category.findOne({ name: categories.SPORTS }).exec();
-  const sportQuestionOne = await QuestionsAndAnswers.find({ category: sportCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
-  const sportQuestionTwo = await QuestionsAndAnswers.find({ category: sportCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
+  const sportBooleanQuestion = await QuestionsAndAnswers.find({ category: sportCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
+  const sportNumericQuestion = await QuestionsAndAnswers.find({ category: sportCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
 
   const geographyCategory = await Category.findOne({ name: categories.GEOGRAPHY }).exec();
-  const geographyQuestionOne = await QuestionsAndAnswers.find({ category: geographyCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
-  const geographyQuestionTwo = await QuestionsAndAnswers.find({ category: geographyCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
+  const geographyBooleanQuestion = await QuestionsAndAnswers.find({ category: geographyCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
+  const geographyNumericQuestion = await QuestionsAndAnswers.find({ category: geographyCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
 
   const technologyCategory = await Category.findOne({ name: categories.TECHNOLOGY }).exec();
-  const technologyQuestionOne = await QuestionsAndAnswers.find({ category: technologyCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
-  const technologyQuestionTwo = await QuestionsAndAnswers.find({ category: technologyCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
+  const technologyBooleanQuestion = await QuestionsAndAnswers.find({ category: technologyCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
+  const technologyNumericQuestion = await QuestionsAndAnswers.find({ category: technologyCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
 
   const entertainmentCategory = await Category.findOne({ name: categories.ENTERTAINMENT }).exec();
-  const entertainmentQuestionOne = await QuestionsAndAnswers.find({ category: entertainmentCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
-  const entertainmentQuestionTwo = await QuestionsAndAnswers.find({ category: entertainmentCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
+  const entertainmentBooleanQuestion = await QuestionsAndAnswers.find({ category: entertainmentCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
+  const entertainmentNumericQuestion = await QuestionsAndAnswers.find({ category: entertainmentCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
 
   const scienceCategory = await Category.findOne({ name: categories.SCIENCE }).exec();
-  const scienceQuestionOne = await QuestionsAndAnswers.find({ category: scienceCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
-  const scienceQuestionTwo = await QuestionsAndAnswers.find({ category: scienceCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
+  const scienceBooleanQuestion = await QuestionsAndAnswers.find({ category: scienceCategory, type: QuestionsTypeEnum.BOOLEAN }).exec();
+  const scienceNumericQuestion = await QuestionsAndAnswers.find({ category: scienceCategory, type: QuestionsTypeEnum.NUMERIC }).exec();
 
   const winnerCategory = await Category.findOne({ name: categories.WINNER }).exec();
 
@@ -49,61 +49,77 @@ const initializeSteps = async (userId) => {
     category: historyCategory,
     participants: [{ user: userId }],
     questions: [
-      historyQuestionOne[getRandomInt(historyQuestionOne.length)],
-      historyQuestionTwo[getRandomInt(historyQuestionTwo.length)],
+      historyBooleanQuestion[getRandomInt(historyBooleanQuestion.length)],
+      historyBooleanQuestion[getRandomInt(historyBooleanQuestion.length)],
+      historyNumericQuestion[getRandomInt(historyNumericQuestion.length)],
     ],
   };
   const step7 = {
     step: 7,
     category: cultureCategory,
     questions: [
-      cultureQuestionOne[getRandomInt(cultureQuestionOne.length)],
-      cultureQuestionTwo[getRandomInt(cultureQuestionTwo.length)],
+      cultureBooleanQuestion[getRandomInt(cultureBooleanQuestion.length)],
+      cultureBooleanQuestion[getRandomInt(cultureBooleanQuestion.length)],
+      cultureNumericQuestion[getRandomInt(cultureNumericQuestion.length)],
     ],
   };
   const step6 = {
     step: 6,
     category: sportCategory,
     questions: [
-      sportQuestionOne[getRandomInt(sportQuestionOne.length)],
-      sportQuestionTwo[getRandomInt(sportQuestionTwo.length)],
+      sportBooleanQuestion[getRandomInt(sportBooleanQuestion.length)],
+      sportBooleanQuestion[getRandomInt(sportBooleanQuestion.length)],
+      sportNumericQuestion[getRandomInt(sportNumericQuestion.length)],
     ],
   };
   const step5 = {
     step: 5,
     category: geographyCategory,
     questions: [
-      geographyQuestionOne[getRandomInt(geographyQuestionOne.length)],
-      geographyQuestionTwo[getRandomInt(geographyQuestionTwo.length)],
+      geographyBooleanQuestion[getRandomInt(geographyBooleanQuestion.length)],
+      geographyBooleanQuestion[getRandomInt(geographyBooleanQuestion.length)],
+      geographyNumericQuestion[getRandomInt(geographyNumericQuestion.length)],
     ],
   };
   const step4 = {
     step: 4,
     category: technologyCategory,
     questions: [
-      technologyQuestionOne[getRandomInt(technologyQuestionOne.length)],
-      technologyQuestionTwo[getRandomInt(technologyQuestionTwo.length)],
+      technologyBooleanQuestion[getRandomInt(technologyBooleanQuestion.length)],
+      technologyBooleanQuestion[getRandomInt(technologyBooleanQuestion.length)],
+      technologyNumericQuestion[getRandomInt(technologyNumericQuestion.length)],
     ],
   };
   const step3 = {
     step: 3,
     category: entertainmentCategory,
     questions: [
-      entertainmentQuestionOne[getRandomInt(entertainmentQuestionOne.length)],
-      entertainmentQuestionTwo[getRandomInt(entertainmentQuestionTwo.length)],
+      entertainmentBooleanQuestion[getRandomInt(entertainmentBooleanQuestion.length)],
+      entertainmentBooleanQuestion[getRandomInt(entertainmentBooleanQuestion.length)],
+      entertainmentNumericQuestion[getRandomInt(entertainmentNumericQuestion.length)],
     ],
   };
   const step2 = {
     step: 2,
     category: scienceCategory,
     questions: [
-      scienceQuestionOne[getRandomInt(scienceQuestionOne.length)],
-      scienceQuestionTwo[getRandomInt(scienceQuestionTwo.length)],
+      scienceBooleanQuestion[getRandomInt(scienceBooleanQuestion.length)],
+      scienceBooleanQuestion[getRandomInt(scienceBooleanQuestion.length)],
+      scienceNumericQuestion[getRandomInt(scienceNumericQuestion.length)],
     ],
   };
   const step1 = {
     step: 1,
     category: winnerCategory,
+    questions: [
+      historyBooleanQuestion[getRandomInt(historyBooleanQuestion.length)],
+      cultureBooleanQuestion[getRandomInt(cultureBooleanQuestion.length)],
+      sportBooleanQuestion[getRandomInt(sportBooleanQuestion.length)],
+      geographyBooleanQuestion[getRandomInt(geographyBooleanQuestion.length)],
+      technologyBooleanQuestion[getRandomInt(technologyBooleanQuestion.length)],
+      entertainmentBooleanQuestion[getRandomInt(entertainmentBooleanQuestion.length)],
+      scienceNumericQuestion[getRandomInt(scienceNumericQuestion.length)],
+    ],
   };
 
   return [step1, step2, step3, step4, step5, step6, step7, step8];
@@ -246,18 +262,15 @@ const saveAndCheckAnswer = async (_, { answer, roomId }, { user, pubSub }) => {
     };
   }
   const areAnswering = currentStep.participants.some((participant) => participant.answers[askQuestion] === undefined);
+  userOnStep.showQuestion = false;
+  pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
   if (areAnswering) {
     userOnStep.status = UserStatusEnum.WAITING;
   } else {
     checkWinners(currentStep, room);
     if (currentStep.askQuestion !== currentStep.questions.length) currentStep.askQuestion += 1;
-    currentStep.participants.forEach((part) => {
-      const par = part;
-      par.status = UserStatusEnum.ANSWERING;
-      par.showQuestion = true;
-    });
   }
-  userOnStep.showQuestion = !areAnswering;
+
   await room.save();
   pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
   return isAnswerCorrect;
@@ -278,6 +291,7 @@ const resetAnswersRoom = async (_, { roomId }) => {
     part.status = UserStatusEnum.ANSWERING;
     part.showQuestion = true;
   });
+  room.steps[7].askQuestion = 0;
   room.currentStep = 7;
   await room.save();
 
