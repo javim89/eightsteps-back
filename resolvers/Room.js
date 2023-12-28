@@ -5,6 +5,7 @@ import Room from "../models/Room.js";
 import User from "../models/User.js";
 import * as RoomController from "../controllers/Room.js";
 import { UserStatusEnum, RoomStatusEnum } from "../utils/constants.js";
+import initTimer from "../utils/timer.js";
 
 const RoomResolvers = {
   Query: {
@@ -14,7 +15,7 @@ const RoomResolvers = {
   },
   Mutation: {
     createRoom: async (_, args, { user }) => RoomController.createRoom(_, args, { user }),
-    resetAnswersRoom: async (_, args) => RoomController.resetAnswersRoom(_, args),
+    resetAnswersRoom: async (_, args, context) => RoomController.resetAnswersRoom(_, args, context),
     saveAndCheckAnswer: async (_, args, context) => RoomController.saveAndCheckAnswer(_, args, context),
     addParticipantToRoom: async (_, args, { pubSub }) => {
       const { id, alias } = args;
@@ -47,6 +48,7 @@ const RoomResolvers = {
             part.showQuestion = true;
             part.status = UserStatusEnum.ANSWERING;
           });
+          initTimer(pubSub, id);
         }
         await room.save();
         pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });
@@ -60,6 +62,9 @@ const RoomResolvers = {
   Subscription: {
     roomSubscription: {
       subscribe: (_, { id }, { pubSub }) => pubSub.asyncIterator(`ROOM_UPDATED_${id}`),
+    },
+    roomTimerSubscription: {
+      subscribe: (_, { id }, { pubSub }) => pubSub.asyncIterator(`ROOM_TIMER_${id}`),
     },
   },
   Room: {

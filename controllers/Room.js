@@ -8,6 +8,7 @@ import {
   RoomStatusEnum, UserStatusEnum, QuestionsTypeEnum, categories,
 } from "../utils/constants.js";
 import checkWinners from "../services/Room.js";
+import { resetTimer } from "../utils/timer.js";
 
 function getRandomInt(num) {
   return Math.floor(Math.random() * num);
@@ -268,6 +269,7 @@ const saveAndCheckAnswer = async (_, { answer, roomId }, { user, pubSub }) => {
     userOnStep.status = UserStatusEnum.WAITING;
   } else {
     checkWinners(currentStep, room);
+    resetTimer(pubSub, room.id);
     if (currentStep.askQuestion !== currentStep.questions.length) currentStep.askQuestion += 1;
   }
 
@@ -276,7 +278,7 @@ const saveAndCheckAnswer = async (_, { answer, roomId }, { user, pubSub }) => {
   return isAnswerCorrect;
 };
 
-const resetAnswersRoom = async (_, { roomId }) => {
+const resetAnswersRoom = async (_, { roomId }, { pubSub }) => {
   const room = await Room.findById(roomId);
   room.steps[0].participants = [];
   room.steps[1].participants = [];
@@ -291,6 +293,7 @@ const resetAnswersRoom = async (_, { roomId }) => {
     part.status = UserStatusEnum.ANSWERING;
     part.showQuestion = true;
   });
+  resetTimer(pubSub, roomId);
   room.steps[7].askQuestion = 0;
   room.currentStep = 7;
   await room.save();

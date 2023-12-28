@@ -2,6 +2,11 @@ import { gql } from "apollo-server-express";
 
 const RoomTypeDefs = gql`
   scalar Any
+  type Timer {
+    progress: Int,
+    seconds: Int,
+    miliseconds: Int,
+  }
   type Room {
     id: ID,
     isPrivate: Boolean,
@@ -25,6 +30,7 @@ const RoomTypeDefs = gql`
   }
   type Subscription {
     roomSubscription(id: ID): Room
+    roomTimerSubscription(id: ID): Timer
   }
 `;
 

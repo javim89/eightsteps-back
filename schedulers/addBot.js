@@ -2,6 +2,7 @@
 import { RoomStatusEnum, UserStatusEnum } from "../utils/constants.js";
 import { getUnfilledRoom } from "../controllers/Room.js";
 import UserBot from "../models/UserBot.js";
+import initTimer from "../utils/timer.js";
 
 async function addBot(pubSub) {
   const unfilledRooms = await getUnfilledRoom();
@@ -24,6 +25,7 @@ async function addBot(pubSub) {
         part.showQuestion = true;
         part.status = UserStatusEnum.ANSWERING;
       });
+      initTimer(pubSub, room.id);
     }
     await room.save();
     pubSub.publish(`ROOM_UPDATED_${room.id}`, { roomSubscription: room });

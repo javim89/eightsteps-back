@@ -1,6 +1,7 @@
 import { RoomStatusEnum, UserStatusEnum, QuestionsTypeEnum } from "../utils/constants.js";
 import Room from "../models/Room.js";
 import checkWinners from "../services/Room.js";
+import { resetTimer } from "../utils/timer.js";
 
 const getRandomAnswer = () => Math.random() < 0.5;
 
@@ -67,6 +68,7 @@ async function answerQuestionBot(bot, pubSub) {
             botOnStep.status = UserStatusEnum.WAITING;
           } else {
             checkWinners(currentStep, room);
+            resetTimer(pubSub, room.id);
             if (currentStep.askQuestion !== currentStep.questions.length) currentStep.askQuestion += 1;
           }
           room.save();
